@@ -20,7 +20,23 @@ description: Create atomic, conventional commits with Beads references and valid
 - If a change spans multiple scopes, stop and propose splitting the commit.
 - Do not invent new scopes.
 
+## Branch naming
+- Pattern: `bd-<bead-id>-<short-description>`
+- Example: `bd-tfo-webapp-98w-user-model`
+
 ## Workflow
+0) **Branch setup (FIRST)**:
+   - Run `git branch --show-current`
+   - If on `main` or `master`:
+     a. Pull latest: `git pull origin main`
+     b. Ask user for bead ID and short description
+     c. Create branch: `git checkout -b bd-<bead-id>-<description>`
+     d. Confirm with user before proceeding
+   - If on feature branch:
+     - Verify branch name matches pattern (warn if not)
+     - Check if behind main: `git fetch origin && git rev-list --count HEAD..origin/main`
+     - If behind, warn user and suggest rebasing
+
 1) Inspect repo state:
    - `git status`
    - `git diff`
