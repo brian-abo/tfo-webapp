@@ -5,80 +5,71 @@ A Go web application using the GOAT stack (Go, htmx/templ, Alpine.js, Tailwind C
 ## Prerequisites
 
 - Go 1.25+
-- Node.js (for Tailwind CSS)
+- Node.js via [nvm](https://github.com/nvm-sh/nvm) (for Tailwind CSS)
+- [templ](https://templ.guide/) for HTML templating
+- [golangci-lint](https://golangci-lint.run/) for linting
 - [goose](https://github.com/pressly/goose) for database migrations
-- PostgreSQL 16+ (local development via Docker)
+- [tmux](https://github.com/tmux/tmux) for dev workflow
+- Docker for local PostgreSQL
 
-### Installing goose
+### Setup
 
 ```bash
+# Node.js (via nvm)
+nvm install --lts
+nvm alias default 'lts/*'
+
+# Go tools
+go install github.com/a-h/templ/cmd/templ@latest
 go install github.com/pressly/goose/v3/cmd/goose@latest
+
+# golangci-lint (macOS)
+brew install golangci-lint
 ```
 
 Ensure `$GOPATH/bin` is in your PATH.
 
-## Database Migrations
-
-Migrations are managed with goose and stored in `db/migrations/`.
-
-### Configuration
-
-Set the database connection string via environment variable:
+## Development Workflow
 
 ```bash
-export DATABASE_URL="postgres://localhost:5432/tfo_webapp?sslmode=disable"
+# Start dev environment (tmux: server + css-watch)
+make dev
+
+# Or run components separately
+make gen           # Run code generation (templ)
+make css           # Build minified CSS
+make css-watch     # CSS watch mode
+go run ./cmd/tfo-webapp  # Run server
 ```
 
-Or pass it directly to make commands (see below).
-
-### Migration Commands
+### Validation
 
 ```bash
-# Run all pending migrations
-make migrate
-
-# Roll back the most recent migration
-make migrate-down
-
-# Show migration status
-make migrate-status
+make lint    # Run golangci-lint
+make test    # Run tests (includes gen)
+make verify  # Full validation: gen, css, lint, test
 ```
 
-### Creating New Migrations
+## Database
+
+### Local PostgreSQL
 
 ```bash
-goose -dir db/migrations create <migration_name> sql
+make db-up    # Start Postgres container
+make db-down  # Stop Postgres container
 ```
 
-This creates a new SQL migration file with up and down sections:
+Connection: `postgres://postgres:postgres@localhost:5432/tfo_webapp_dev?sslmode=disable`
 
-```sql
--- +goose Up
--- SQL statements for applying the migration
-
--- +goose Down
--- SQL statements for reverting the migration
-```
-
-### Migration Guidelines
-
-- One migration per logical change
-- Always include both up and down migrations
-- Use standard SQL compatible with PostgreSQL 16 and Aurora PostgreSQL
-- Test migrations locally before deploying
-- Avoid destructive operations (DROP, TRUNCATE) without explicit approval
-
-## Development
-
-### Build CSS
+### Migrations
 
 ```bash
-make css        # Build minified CSS
-make css-watch  # Watch mode for development
+make migrate         # Run pending migrations
+make migrate-down    # Roll back one migration
+make migrate-status  # Show migration status
+
+# Create new migration
+goose -dir db/migrations create <name> sql
 ```
 
-### Run the Application
-
-```bash
-go run ./cmd/tfo-webapp
-```
+Migrations are stored in `db/migrations/`. See design docs for guidelines.
