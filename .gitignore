@@ -37,6 +37,7 @@ pnpm-debug.log*
 # Tailwind output (adjust if committed intentionally)
 tailwind.css
 tailwind.min.css
+web/static/styles.css
 
 # --------------------
 # Tooling / editors
