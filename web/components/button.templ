@@ -1,0 +1,20 @@
+package components
+
+type ButtonVariant string
+
+const (
+	ButtonPrimary   ButtonVariant = "primary"
+	ButtonSecondary ButtonVariant = "secondary"
+)
+
+templ Button(text string, variant ButtonVariant) {
+	if variant == ButtonSecondary {
+		<button class="px-4 py-2 rounded bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors">
+			{ text }
+		</button>
+	} else {
+		<button class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+			{ text }
+		</button>
+	}
+}
