@@ -71,6 +71,7 @@ Constraints:
 ## Work tracking (Beads)
 - Beads (`bd`) is the **only** task / issue system.
 - Do NOT create TODO.md / PLAN.md / TASKS.md.
+- Do NOT expose email address in tasks.
 - Before starting work: review Beads for active issues.
 - After finishing work: update the issue with results and validation evidence.
 
