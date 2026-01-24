@@ -78,6 +78,13 @@ Constraints:
 - Create a feature branch for each bead or logical change set.
 - Use `/create-pr` to draft/open PRs.
 
+## Required skills
+These skills MUST be used for their respective operations. Do not fall back to default behaviors.
+
+- `/commit` - MUST be used for all git commits (overrides default commit behavior)
+- `/create-pr` - MUST be used for all pull requests
+- `/go-change` - Use for non-trivial Go implementation work
+
 ## Work tracking (Beads)
 - Beads (`bd`) is the **only** task / issue system.
 - Do NOT create TODO.md / PLAN.md / TASKS.md.
