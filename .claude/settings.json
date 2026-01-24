@@ -1,0 +1,22 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/gofmt.sh" },
+          { "type": "command", "command": ".claude/hooks/templ-fmt.sh" }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/golangci-lint.sh" },
+          { "type": "command", "command": ".claude/hooks/go-test.sh" }
+        ]
+      }
+    ]
+  }
+}
+

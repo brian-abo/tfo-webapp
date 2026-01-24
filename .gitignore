@@ -1,0 +1,66 @@
+# --------------------
+# Go
+# --------------------
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Build artifacts
+/bin/
+/dist/
+/build/
+
+# Coverage / profiling
+coverage.out
+*.prof
+
+# --------------------
+# templ
+# --------------------
+# Generated files (if using templ generate)
+*_templ.go
+
+# --------------------
+# Node / Tailwind
+# --------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Tailwind output (adjust if committed intentionally)
+tailwind.css
+tailwind.min.css
+
+# --------------------
+# Tooling / editors
+# --------------------
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# --------------------
+# Environment / secrets
+# --------------------
+.env
+.env.*
+!.env.example
+
+# --------------------
+# OS / misc
+# --------------------
+Thumbs.db
+
+# --------------------
+# Beads
+# --------------------
+# (intentionally NOT ignored — beads lives in git)
+
