@@ -62,5 +62,4 @@ Thumbs.db
 # --------------------
 # Beads
 # --------------------
-# (intentionally NOT ignored — beads lives in git)
-
+.beads/export-state/
