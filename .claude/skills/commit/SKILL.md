@@ -5,9 +5,20 @@ description: Create atomic, conventional commits with Beads references and valid
 
 ## Principles
 - Atomic: one logical change per commit.
+- Commit message MUST be: type(scope): subject
+  - scope is required (no exceptions).
 - Each commit should build and tests should pass (or explicitly explain why not).
 - Prefer Conventional Commits: type(scope): subject
 - Reference Beads issues when relevant: `Refs: BD-<id>` (footer)
+
+## Commit scope rules
+- Commit messages MUST follow: type(scope): subject
+- Scope is REQUIRED.
+- Allowed scopes:
+  scaffold, web, domain, repo, auth, config,
+  infra, ci, docs, test, refactor, chore
+- If a change spans multiple scopes, stop and propose splitting the commit.
+- Do not invent new scopes.
 
 ## Workflow
 1) Inspect repo state:
@@ -22,19 +33,24 @@ description: Create atomic, conventional commits with Beads references and valid
      - whether it needs tests updated/added
 3) Stage *surgically*:
    - Prefer `git add -p` (or file-by-file) over `git add .`
-4) Validate before committing (unless user says otherwise):
-   - gofmt / templ fmt already handled by hooks
-   - `golangci-lint run ./...` (if available)
-   - `go test ./...`
+4) Validate (unless user says otherwise):
+   - formatting handled by hooks
+   - `golangci-lint run ./...` (if available and go.mod exists)
+   - `go test ./...` (if go.mod exists)
 5) Commit:
-   - Use the proposed message
-   - Include footer when applicable:
-     - `Refs: BD-<id>`
+   - Use the proposed message exactly.
+   - Add Beads reference footer when applicable:
+     - `Refs: <bead-id>`
+   - DO NOT add any AI attribution lines:
+     - no "Co-authored-by"
+     - no "Generated-by"
+     - no "AI-assisted"
+   - Ensure git author is the user's normal git identity (do not override author).
+   - Validate the commit message matches type(scope): subject with an allowed scope before committing.
 6) Output (be concise):
-   - Commit hash(es)
+   - Commit hash
    - Messages
    - Commands run + outcomes
-   - Any follow-ups
 
 ## Safety / constraints
 - Never commit secrets.

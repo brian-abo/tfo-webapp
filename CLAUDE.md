@@ -66,7 +66,11 @@ Constraints:
 - Reference Beads issues when applicable:
   `Refs: BD-<id>`
 - Use `/commit` to propose or create commits.
-- Use `/create-pr` to draft or open pull requests.
+
+## PR-only workflow
+- All code changes must go through a Pull Request (no direct commits to main).
+- Create a feature branch for each bead or logical change set.
+- Use `/create-pr` to draft/open PRs.
 
 ## Work tracking (Beads)
 - Beads (`bd`) is the **only** task / issue system.
