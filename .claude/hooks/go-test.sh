@@ -1,4 +1,8 @@
+
 #!/usr/bin/env bash
 set -euo pipefail
-command -v go >/dev/null || exit 0
+
+# Skip if not a Go module yet
+[[ -f "go.mod" ]] || exit 0
+
 go test ./...

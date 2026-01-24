@@ -4,7 +4,7 @@
       {
         "matcher": "Write|Edit",
         "hooks": [
-          { "type": "command", "command": ".claude/hooks/gofmt.sh" },
+          { "type": "command", "command": ".claude/hooks/go-fmt.sh" },
           { "type": "command", "command": ".claude/hooks/templ-fmt.sh" }
         ]
       }
