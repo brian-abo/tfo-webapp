@@ -74,6 +74,21 @@ Constraints:
 - Before starting work: review Beads for active issues.
 - After finishing work: update the issue with results and validation evidence.
 
+## Bead structure contract
+Unless explicitly stated otherwise, Beads should follow this structure:
+
+- Problem / Goal
+- Context / Constraints (only if relevant)
+- Decisions
+- Risks
+- Acceptance criteria
+- If information is missing or ambigous, ask clarifiying questions before updating the bead.
+- Once updated, the bead should be ready for implementation.
+- Avoid "Open Questions" sections inside beads.
+
+Not all sections are required for every bead, but Problem and Acceptance
+should always be present. Keep sections concise.
+
 ## Evidence required in responses
 When code changes:
 - Files changed
