@@ -58,6 +58,12 @@ Constraints:
 - Errors wrapped intentionally using `%w`
 - Public APIs require godoc comments
 
+## Generated files policy
+- templ-generated Go files (`*_templ.go`) are NOT committed.
+- `.templ` files are the source of truth.
+- The build/test pipeline must run `templ generate` before `go test`.
+- Do not attempt to stage or commit generated templ output.
+
 ## Git + atomic commits
 - Commits must be small and atomic (one logical change per commit).
 - Each commit must compile and tests should pass, or explicitly state why they cannot.
