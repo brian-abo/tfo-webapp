@@ -10,5 +10,6 @@ import (
 func Index(w http.ResponseWriter, r *http.Request) {
 	if err := home.Page().Render(r.Context(), w); err != nil {
 		log.Printf("render error: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 }
