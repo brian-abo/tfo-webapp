@@ -5,6 +5,7 @@ import (
 
 	"github.com/brian-abo/tfo-webapp/internal/handler/about"
 	"github.com/brian-abo/tfo-webapp/internal/handler/contact"
+	"github.com/brian-abo/tfo-webapp/internal/handler/gallery"
 	"github.com/brian-abo/tfo-webapp/internal/handler/home"
 )
 
@@ -24,6 +25,9 @@ func NewRouter() *http.ServeMux {
 	// Contact
 	mux.HandleFunc("GET /contact", contact.Index)
 	mux.HandleFunc("POST /contact", contact.Submit)
+
+	// Gallery
+	mux.HandleFunc("GET /gallery", gallery.Index)
 
 	return mux
 }
