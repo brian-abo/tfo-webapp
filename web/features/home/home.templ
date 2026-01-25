@@ -8,5 +8,8 @@ import (
 templ Page() {
 	@layout.PageFull(layout.PageProps{Title: "The Fallen Outdoors"}) {
 		@components.Hero(components.DefaultHeroProps())
+		@components.Mission(components.DefaultMissionProps())
+		@components.Stats(components.DefaultStats())
+		@components.Testimonials(components.DefaultTestimonials())
 	}
 }
