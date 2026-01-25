@@ -1,0 +1,173 @@
+package contact
+
+import "github.com/brian-abo/tfo-webapp/web/layout"
+
+templ Page() {
+	@layout.Page(layout.PageProps{Title: "Contact Us - The Fallen Outdoors"}) {
+		<div class="max-w-4xl mx-auto">
+			<!-- Page Header -->
+			<div class="mb-12 text-center">
+				<h1 class="text-4xl font-bold text-neutral-900">Contact Us</h1>
+				<p class="mt-4 text-lg text-neutral-600">
+					Have questions or want to get involved? We'd love to hear from you.
+				</p>
+			</div>
+			<div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+				<div>
+					@Form()
+					@ContactInfo()
+				</div>
+				<div>
+					@RegionalLeaders(DefaultRegionalLeaders())
+				</div>
+			</div>
+		</div>
+	}
+}
+
+templ Form() {
+	<section class="mb-12">
+		<form
+			x-data="{
+				name: '',
+				email: '',
+				message: '',
+				submitted: false,
+				errors: {},
+				validate() {
+					this.errors = {};
+					if (!this.name.trim()) this.errors.name = 'Name is required';
+					if (!this.email.trim()) {
+						this.errors.email = 'Email is required';
+					} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
+						this.errors.email = 'Please enter a valid email';
+					}
+					if (!this.message.trim()) this.errors.message = 'Message is required';
+					return Object.keys(this.errors).length === 0;
+				},
+				submit() {
+					if (this.validate()) {
+						this.submitted = true;
+					}
+				}
+			}"
+			@submit.prevent="submit()"
+			class="bg-white rounded-lg border border-neutral-200 p-6 sm:p-8"
+		>
+			<!-- Success Message -->
+			<div
+				x-show="submitted"
+				x-cloak
+				class="mb-6 p-4 bg-primary-50 border border-primary-200 rounded-md"
+			>
+				<div class="flex items-center">
+					<svg class="w-5 h-5 text-primary-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+					</svg>
+					<span class="text-primary-800 font-medium">Thank you! We'll be in touch soon.</span>
+				</div>
+			</div>
+			<div x-show="!submitted">
+				<!-- Name Field -->
+				<div class="mb-6">
+					<label for="name" class="block text-sm font-medium text-neutral-700 mb-2">
+						Name <span class="text-red-500">*</span>
+					</label>
+					<input
+						type="text"
+						id="name"
+						name="name"
+						x-model="name"
+						class="w-full px-4 py-2 border border-neutral-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+						:class="errors.name ? 'border-red-500' : ''"
+						placeholder="Your name"
+					/>
+					<p x-show="errors.name" x-text="errors.name" class="mt-1 text-sm text-red-600"></p>
+				</div>
+				<!-- Email Field -->
+				<div class="mb-6">
+					<label for="email" class="block text-sm font-medium text-neutral-700 mb-2">
+						Email <span class="text-red-500">*</span>
+					</label>
+					<input
+						type="email"
+						id="email"
+						name="email"
+						x-model="email"
+						class="w-full px-4 py-2 border border-neutral-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+						:class="errors.email ? 'border-red-500' : ''"
+						placeholder="you@example.com"
+					/>
+					<p x-show="errors.email" x-text="errors.email" class="mt-1 text-sm text-red-600"></p>
+				</div>
+				<!-- Message Field -->
+				<div class="mb-6">
+					<label for="message" class="block text-sm font-medium text-neutral-700 mb-2">
+						Message <span class="text-red-500">*</span>
+					</label>
+					<textarea
+						id="message"
+						name="message"
+						x-model="message"
+						rows="5"
+						class="w-full px-4 py-2 border border-neutral-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors resize-none"
+						:class="errors.message ? 'border-red-500' : ''"
+						placeholder="How can we help you?"
+					></textarea>
+					<p x-show="errors.message" x-text="errors.message" class="mt-1 text-sm text-red-600"></p>
+				</div>
+				<!-- Submit Button -->
+				<button
+					type="submit"
+					class="w-full px-6 py-3 text-white bg-primary-600 rounded-md font-semibold hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
+				>
+					Send Message
+				</button>
+			</div>
+		</form>
+	</section>
+}
+
+templ ContactInfo() {
+	<section class="text-center text-neutral-600">
+		<h2 class="text-xl font-semibold text-neutral-900 mb-4">Other Ways to Reach Us</h2>
+		<div class="space-y-2">
+			<p>
+				<span class="font-medium">Email:</span>
+				<a href="mailto:info@thefallenoutdoors.org" class="text-primary-600 hover:text-primary-700">
+					info@thefallenoutdoors.org
+				</a>
+			</p>
+			<p>
+				<span class="font-medium">Follow us:</span>
+				<a href="#" class="text-primary-600 hover:text-primary-700 ml-1">Facebook</a>
+				<span class="mx-1">|</span>
+				<a href="#" class="text-primary-600 hover:text-primary-700">Instagram</a>
+				<span class="mx-1">|</span>
+				<a href="#" class="text-primary-600 hover:text-primary-700">YouTube</a>
+			</p>
+		</div>
+	</section>
+}
+
+templ RegionalLeaders(leaders []RegionalLeader) {
+	<section>
+		<h2 class="text-2xl font-bold text-neutral-900 mb-6">Connect with Regional Leaders</h2>
+		<p class="text-neutral-600 mb-6">
+			Reach out directly to a regional leader in your area for local events and opportunities.
+		</p>
+		<div class="space-y-4">
+			for _, leader := range leaders {
+				<div class="bg-secondary-50 rounded-lg p-4">
+					<h3 class="font-semibold text-neutral-900">{ leader.Name }</h3>
+					<p class="text-sm text-primary-600 font-medium">{ leader.Region }</p>
+					<p class="mt-2 text-sm">
+						<a href={ templ.SafeURL("mailto:" + leader.Email) } class="text-neutral-600 hover:text-primary-600">
+							{ leader.Email }
+						</a>
+					</p>
+				</div>
+			}
+		</div>
+	</section>
+}
