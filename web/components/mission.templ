@@ -1,0 +1,17 @@
+package components
+
+// Mission renders the mission/about section.
+templ Mission(props MissionProps) {
+	<section class="bg-white py-16 sm:py-24">
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="max-w-3xl mx-auto text-center">
+				<h2 class="text-3xl sm:text-4xl font-bold text-neutral-900">
+					{ props.Heading }
+				</h2>
+				<p class="mt-6 text-lg text-neutral-600 leading-relaxed">
+					{ props.Description }
+				</p>
+			</div>
+		</div>
+	</section>
+}
