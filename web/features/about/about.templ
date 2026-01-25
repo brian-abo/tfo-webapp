@@ -1,0 +1,97 @@
+package about
+
+import "github.com/brian-abo/tfo-webapp/web/layout"
+
+templ Page() {
+	@layout.Page(layout.PageProps{Title: "About Us - The Fallen Outdoors"}) {
+		<!-- Page Header -->
+		<div class="mb-12">
+			<h1 class="text-4xl font-bold text-neutral-900">About Us</h1>
+			<p class="mt-4 text-lg text-neutral-600">
+				Learn more about our mission, leadership, and commitment to transparency.
+			</p>
+		</div>
+		@Overview()
+		@Leadership(DefaultLeaders())
+		@Transparency(DefaultDocuments())
+	}
+}
+
+templ Overview() {
+	<section class="mb-16">
+		<h2 class="text-2xl font-bold text-neutral-900 mb-6">Our Story</h2>
+		<div class="prose prose-lg max-w-none text-neutral-600">
+			<p class="mb-4">
+				The Fallen Outdoors was founded in 2015 by a group of veterans who understood
+				that healing doesn't always happen in a clinic or office. Sometimes it happens
+				in a deer stand at dawn, on a quiet lake at sunset, or around a campfire with
+				people who truly understand.
+			</p>
+			<p class="mb-4">
+				What started as informal hunting trips among friends has grown into a nationwide
+				movement serving thousands of veterans, active duty service members, and Gold Star
+				families each year. Our programs are always free to participants, funded entirely
+				by generous donors and dedicated volunteers.
+			</p>
+			<p>
+				We believe that outdoor experiences create lasting bonds, provide therapeutic
+				benefits, and honor the memory of those who gave everything in service to our
+				country. Every hunt, every fishing trip, every outdoor adventure is an opportunity
+				to heal, connect, and remember.
+			</p>
+		</div>
+	</section>
+}
+
+templ Leadership(leaders []Leader) {
+	<section class="mb-16">
+		<h2 class="text-2xl font-bold text-neutral-900 mb-6">Leadership Team</h2>
+		<div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+			for _, leader := range leaders {
+				<div class="bg-white rounded-lg border border-neutral-200 p-6">
+					<!-- Photo placeholder -->
+					<div class="w-24 h-24 mx-auto mb-4 rounded-full bg-primary-100 flex items-center justify-center">
+						if leader.Photo != "" {
+							<img src={ leader.Photo } alt={ leader.Name } class="w-24 h-24 rounded-full object-cover"/>
+						} else {
+							<svg class="w-12 h-12 text-primary-400" fill="currentColor" viewBox="0 0 24 24">
+								<path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+							</svg>
+						}
+					</div>
+					<div class="text-center">
+						<h3 class="font-semibold text-neutral-900">{ leader.Name }</h3>
+						<p class="text-sm text-primary-600 mb-3">{ leader.Title }</p>
+						<p class="text-sm text-neutral-600">{ leader.Bio }</p>
+					</div>
+				</div>
+			}
+		</div>
+	</section>
+}
+
+templ Transparency(documents []Document) {
+	<section class="mb-8">
+		<h2 class="text-2xl font-bold text-neutral-900 mb-6">Transparency</h2>
+		<p class="text-neutral-600 mb-6">
+			We believe in full transparency with our supporters. Below you'll find our key
+			organizational documents available for download.
+		</p>
+		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+			for _, doc := range documents {
+				<a
+					href={ templ.SafeURL(doc.Href) }
+					class="flex items-start p-4 bg-secondary-50 rounded-lg hover:bg-secondary-100 transition-colors"
+				>
+					<svg class="w-6 h-6 text-primary-600 mt-0.5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+					</svg>
+					<div>
+						<div class="font-medium text-neutral-900">{ doc.Name }</div>
+						<div class="text-sm text-neutral-600">{ doc.Description }</div>
+					</div>
+				</a>
+			}
+		</div>
+	</section>
+}

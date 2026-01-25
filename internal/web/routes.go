@@ -3,6 +3,7 @@ package web
 import (
 	"net/http"
 
+	"github.com/brian-abo/tfo-webapp/internal/handler/about"
 	"github.com/brian-abo/tfo-webapp/internal/handler/home"
 )
 
@@ -15,6 +16,9 @@ func NewRouter() *http.ServeMux {
 
 	// Home
 	mux.HandleFunc("GET /", home.Index)
+
+	// About
+	mux.HandleFunc("GET /about", about.Index)
 
 	return mux
 }
