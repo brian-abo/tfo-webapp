@@ -1,0 +1,59 @@
+package components
+
+// HeaderProps contains configuration for the header component.
+type HeaderProps struct {
+	IsLoggedIn bool
+	UserName   string
+}
+
+// Header renders the site header with logo, navigation area, and auth state.
+templ Header(props HeaderProps) {
+	<header class="bg-secondary-100 border-b border-secondary-200">
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="flex items-center justify-between h-16">
+				<!-- Logo -->
+				<div class="flex-shrink-0">
+					<a href="/" class="flex items-center">
+						<span class="text-xl font-bold text-primary-700">The Fallen Outdoors</span>
+					</a>
+				</div>
+				<!-- Navigation area (slot for nav menu) -->
+				<nav class="hidden md:flex items-center space-x-8">
+					{ children... }
+				</nav>
+				<!-- Auth state -->
+				<div class="flex items-center">
+					if props.IsLoggedIn {
+						<div class="flex items-center space-x-3">
+							<span class="text-sm text-neutral-700">{ props.UserName }</span>
+							<div class="w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center">
+								<span class="text-sm font-medium text-white">
+									{ string([]rune(props.UserName)[0]) }
+								</span>
+							</div>
+						</div>
+					} else {
+						<a
+							href="/login"
+							class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-md hover:bg-primary-700 transition-colors"
+						>
+							Log In
+						</a>
+					}
+				</div>
+				<!-- Mobile menu button (placeholder for nav menu task) -->
+				<div class="md:hidden">
+					<button
+						type="button"
+						class="p-2 rounded-md text-neutral-600 hover:text-neutral-900 hover:bg-secondary-200"
+						aria-label="Open menu"
+					>
+						<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+						</svg>
+					</button>
+				</div>
+			</div>
+		</div>
+	</header>
+}
