@@ -1,0 +1,73 @@
+package gallery
+
+import "github.com/brian-abo/tfo-webapp/web/layout"
+
+templ Page() {
+	@layout.Page(layout.PageProps{Title: "Gallery - The Fallen Outdoors"}) {
+		<!-- Page Header -->
+		<div class="mb-12">
+			<h1 class="text-4xl font-bold text-neutral-900">Gallery</h1>
+			<p class="mt-4 text-lg text-neutral-600">
+				Moments from our hunts, fishing trips, and outdoor adventures with veterans and Gold Star families.
+			</p>
+		</div>
+		@ImageGrid(DefaultGalleryImages())
+	}
+}
+
+templ ImageGrid(images []GalleryImage) {
+	<div x-data="{ lightbox: { open: false, src: '', alt: '', caption: '' } }" x-on:keydown.escape.window="lightbox.open = false">
+		<!-- Grid -->
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+			for _, img := range images {
+				<figure
+					class="group relative overflow-hidden rounded-lg bg-neutral-100 cursor-pointer"
+					x-on:click={ "lightbox = { open: true, src: '" + img.Src + "', alt: '" + img.Alt + "', caption: '" + img.Caption + "' }" }
+				>
+					<img
+						src={ img.Src }
+						alt={ img.Alt }
+						loading="lazy"
+						class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+					/>
+					<figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-neutral-900/80 to-transparent p-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+						<p class="text-sm">{ img.Caption }</p>
+					</figcaption>
+				</figure>
+			}
+		</div>
+		<!-- Lightbox Modal -->
+		<div
+			x-show="lightbox.open"
+			x-cloak
+			class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90"
+			style="position: fixed; top: 0; left: 0; right: 0; bottom: 0;"
+			x-on:click="lightbox.open = false"
+		>
+			<div class="relative" x-on:click.stop>
+				<!-- Close button -->
+				<button
+					x-on:click="lightbox.open = false"
+					class="absolute -top-10 right-0 text-white hover:text-neutral-300"
+					aria-label="Close"
+				>
+					<svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+					</svg>
+				</button>
+				<!-- Image -->
+				<img
+					x-bind:src="lightbox.src"
+					x-bind:alt="lightbox.alt"
+					class="max-w-[90vw] max-h-[80vh] rounded-lg"
+				/>
+				<!-- Caption -->
+				<p
+					x-show="lightbox.caption"
+					x-text="lightbox.caption"
+					class="mt-4 text-center text-white text-lg"
+				></p>
+			</div>
+		</div>
+	</div>
+}
