@@ -36,3 +36,20 @@ templ Page(props PageProps) {
 		@components.Footer()
 	}
 }
+
+// PageFull renders a page where children are full-width (no container constraint).
+// Use this for pages with hero sections or other edge-to-edge content.
+templ PageFull(props PageProps) {
+	@Base(props.Title) {
+		@components.Header(components.HeaderProps{
+			IsLoggedIn: props.IsLoggedIn,
+			UserName:   props.UserName,
+		}) {
+			@components.Nav(components.DefaultNavItems())
+		}
+		<main class="flex-1">
+			{ children... }
+		</main>
+		@components.Footer()
+	}
+}
