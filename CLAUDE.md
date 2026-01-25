@@ -84,6 +84,19 @@ These skills MUST be used for their respective operations. Do not fall back to d
 - `/commit` - MUST be used for all git commits (overrides default commit behavior)
 - `/create-pr` - MUST be used for all pull requests
 - `/go-change` - Use for non-trivial Go implementation work
+- `/verify-ui` - MUST be run before committing changes that affect observable UI
+
+## UI verification workflow
+Before committing any changes that could affect what the user sees in the browser:
+1. Run `/verify-ui` to build assets and start the server
+2. Wait for user to visually inspect and approve
+3. Only proceed to `/commit` after approval
+
+This includes (but is not limited to):
+- Templates and components (`web/`)
+- Handlers that render pages
+- Models/data that surface in the UI
+- Database migrations affecting displayed data
 
 ## Work tracking (Beads)
 - Beads (`bd`) is the **only** task / issue system.
