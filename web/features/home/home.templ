@@ -6,27 +6,25 @@ import (
 )
 
 templ Page() {
-	@layout.Base("Home") {
-		<main class="max-w-4xl mx-auto p-8">
-			<h1 class="text-3xl font-bold mb-6">Welcome</h1>
-			<div class="space-y-4">
-				<p class="text-gray-600">GOAT stack foundation is working.</p>
-				<div class="flex gap-2">
-					@components.Button("Primary", components.ButtonPrimary)
-					@components.Button("Secondary", components.ButtonSecondary)
-				</div>
-				<div x-data="{ open: false }" class="mt-6">
-					<button
-						x-on:click="open = !open"
-						class="text-blue-600 underline"
-					>
-						Toggle Alpine demo
-					</button>
-					<p x-show="open" x-transition class="mt-2 p-4 bg-blue-50 rounded">
-						Alpine.js is working.
-					</p>
-				</div>
+	@layout.Page(layout.PageProps{Title: "Home"}) {
+		<h1 class="text-3xl font-bold mb-6 text-neutral-900">Welcome</h1>
+		<div class="space-y-4">
+			<p class="text-neutral-600">GOAT stack foundation is working.</p>
+			<div class="flex gap-2">
+				@components.Button("Primary", components.ButtonPrimary)
+				@components.Button("Secondary", components.ButtonSecondary)
 			</div>
-		</main>
+			<div x-data="{ open: false }" class="mt-6">
+				<button
+					x-on:click="open = !open"
+					class="text-primary-600 underline"
+				>
+					Toggle Alpine demo
+				</button>
+				<p x-show="open" x-transition class="mt-2 p-4 bg-primary-50 rounded">
+					Alpine.js is working.
+				</p>
+			</div>
+		</div>
 	}
 }

@@ -1,5 +1,8 @@
 package layout
 
+import "github.com/brian-abo/tfo-webapp/web/components"
+
+// Base renders the HTML document shell. Use Page for full page layouts.
 templ Base(title string) {
 	<!DOCTYPE html>
 	<html lang="en">
@@ -10,8 +13,26 @@ templ Base(title string) {
 			<link rel="stylesheet" href="/static/styles.css"/>
 			<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 		</head>
-		<body class="bg-gray-50 text-gray-900">
+		<body class="min-h-screen flex flex-col bg-neutral-50 text-neutral-900">
 			{ children... }
 		</body>
 	</html>
+}
+
+// Page renders a complete page with header, main content area, and footer.
+templ Page(props PageProps) {
+	@Base(props.Title) {
+		@components.Header(components.HeaderProps{
+			IsLoggedIn: props.IsLoggedIn,
+			UserName:   props.UserName,
+		}) {
+			@components.Nav(components.DefaultNavItems())
+		}
+		<main class="flex-1">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+				{ children... }
+			</div>
+		</main>
+		@components.Footer()
+	}
 }
