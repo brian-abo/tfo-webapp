@@ -2,6 +2,7 @@ package contact
 
 // RegionalLeader represents a regional director/leader.
 type RegionalLeader struct {
+	ID     string
 	Name   string
 	Region string
 	Email  string
@@ -11,34 +12,38 @@ type RegionalLeader struct {
 func DefaultRegionalLeaders() []RegionalLeader {
 	return []RegionalLeader{
 		{
-			Name:   "Tom Anderson",
-			Region: "Northeast",
-			Email:  "northeast@thefallenoutdoors.org",
+			ID:     "west-coast",
+			Name:   "David Lee",
+			Region: "West Coast",
+			Email:  "westcoast@thefallenoutdoors.org",
 		},
 		{
-			Name:   "Maria Garcia",
-			Region: "Southeast",
-			Email:  "southeast@thefallenoutdoors.org",
-		},
-		{
+			ID:     "midwest",
 			Name:   "James Wilson",
 			Region: "Midwest",
 			Email:  "midwest@thefallenoutdoors.org",
 		},
 		{
-			Name:   "Sarah Brown",
-			Region: "Southwest",
-			Email:  "southwest@thefallenoutdoors.org",
+			ID:     "east-coast",
+			Name:   "Tom Anderson",
+			Region: "East Coast",
+			Email:  "eastcoast@thefallenoutdoors.org",
 		},
 		{
-			Name:   "David Lee",
-			Region: "West",
-			Email:  "west@thefallenoutdoors.org",
-		},
-		{
-			Name:   "Jennifer Martinez",
-			Region: "Pacific Northwest",
-			Email:  "pnw@thefallenoutdoors.org",
+			ID:     "southern",
+			Name:   "Maria Garcia",
+			Region: "Southern",
+			Email:  "southern@thefallenoutdoors.org",
 		},
 	}
+}
+
+// LeadersByID returns a map of leaders keyed by their region ID.
+func LeadersByID() map[string]RegionalLeader {
+	leaders := DefaultRegionalLeaders()
+	result := make(map[string]RegionalLeader, len(leaders))
+	for _, l := range leaders {
+		result[l.ID] = l
+	}
+	return result
 }
