@@ -57,6 +57,13 @@ Constraints:
 - Tests required for behavior changes
 - Errors wrapped intentionally using `%w`
 - Public APIs require godoc comments
+- Functions that perform I/O or may block must accept `context.Context` as the first parameter
+- Never instantiate a context inside a library function; always accept it from the caller
+- All tests use Gomega (dot-import `github.com/onsi/gomega`, `g := NewWithT(t)`)
+- Tests must use `t.Context()` instead of `context.Background()`
+- Validate all external input at system boundaries (user input, HTTP requests, external APIs)
+- Use `database/sql` parameterized queries (`$1`, `$2`) for all SQL -- never string concatenation
+- Use `net/mail.ParseAddress` for email validation on server-side form handling
 
 ## Generated files policy
 - templ-generated Go files (`*_templ.go`) are NOT committed.
