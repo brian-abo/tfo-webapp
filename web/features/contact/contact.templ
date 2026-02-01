@@ -4,7 +4,27 @@ import "github.com/brian-abo/tfo-webapp/web/layout"
 
 templ Page() {
 	@layout.Page(layout.PageProps{Title: "Contact Us - The Fallen Outdoors"}) {
-		<div class="max-w-4xl mx-auto">
+		<div
+			class="max-w-6xl mx-auto"
+			x-data="{
+				selectedRegion: null,
+				selectedDirector: null,
+				leaders: {
+					'west-coast': { name: 'David Lee', region: 'West Coast', email: 'westcoast@thefallenoutdoors.org' },
+					'midwest': { name: 'James Wilson', region: 'Midwest', email: 'midwest@thefallenoutdoors.org' },
+					'east-coast': { name: 'Tom Anderson', region: 'East Coast', email: 'eastcoast@thefallenoutdoors.org' },
+					'southern': { name: 'Maria Garcia', region: 'Southern', email: 'southern@thefallenoutdoors.org' }
+				},
+				selectRegion(regionId) {
+					this.selectedRegion = regionId;
+					this.selectedDirector = this.leaders[regionId];
+				},
+				sendMessage() {
+					document.getElementById('contact-form').scrollIntoView({ behavior: 'smooth' });
+				}
+			}"
+			x-on:keydown.escape.window="selectedRegion = null"
+		>
 			<!-- Page Header -->
 			<div class="mb-12 text-center">
 				<h1 class="text-4xl font-bold text-neutral-900">Contact Us</h1>
@@ -12,6 +32,8 @@ templ Page() {
 					Have questions or want to get involved? We'd love to hear from you.
 				</p>
 			</div>
+			<!-- Regional Map Section -->
+			@RegionalMap()
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
 				<div>
 					@Form()
@@ -26,7 +48,7 @@ templ Page() {
 }
 
 templ Form() {
-	<section class="mb-12">
+	<section id="contact-form" class="mb-12">
 		<form
 			x-data="{
 				name: '',
@@ -158,11 +180,15 @@ templ RegionalLeaders(leaders []RegionalLeader) {
 		</p>
 		<div class="space-y-4">
 			for _, leader := range leaders {
-				<div class="bg-secondary-50 rounded-lg p-4">
+				<div
+					class="bg-secondary-50 rounded-lg p-4 cursor-pointer transition-all duration-200"
+					:class={ "selectedRegion === '" + leader.ID + "' ? 'ring-2 ring-primary-500 bg-primary-50' : 'hover:bg-secondary-100'" }
+					x-on:click={ "selectRegion('" + leader.ID + "')" }
+				>
 					<h3 class="font-semibold text-neutral-900">{ leader.Name }</h3>
 					<p class="text-sm text-primary-600 font-medium">{ leader.Region }</p>
 					<p class="mt-2 text-sm">
-						<a href={ templ.SafeURL("mailto:" + leader.Email) } class="text-neutral-600 hover:text-primary-600">
+						<a href={ templ.SafeURL("mailto:" + leader.Email) } class="text-neutral-600 hover:text-primary-600" x-on:click.stop>
 							{ leader.Email }
 						</a>
 					</p>
@@ -170,4 +196,78 @@ templ RegionalLeaders(leaders []RegionalLeader) {
 			}
 		</div>
 	</section>
+}
+
+templ RegionalMap() {
+	<section class="mb-12">
+		<h2 class="text-2xl font-bold text-neutral-900 mb-4 text-center">Find Your Region</h2>
+		<p class="text-neutral-600 mb-6 text-center">
+			Click on a region to connect with your local director.
+		</p>
+		<div class="flex flex-col lg:flex-row gap-8 items-start">
+			<!-- Map -->
+			<div class="flex-1 w-full">
+				@USMapSVG()
+			</div>
+			<!-- Selected Leader Panel -->
+			<div
+				x-show="selectedDirector"
+				x-cloak
+				x-transition:enter="transition ease-out duration-200"
+				x-transition:enter-start="opacity-0 translate-y-2"
+				x-transition:enter-end="opacity-100 translate-y-0"
+				class="lg:w-80 w-full bg-white border border-neutral-200 rounded-lg p-6 shadow-lg"
+			>
+				<h3 class="text-lg font-bold text-neutral-900" x-text="selectedDirector?.region + ' Region'"></h3>
+				<div class="mt-4">
+					<p class="font-semibold text-neutral-800" x-text="selectedDirector?.name"></p>
+					<p class="text-sm text-neutral-600 mt-1">Regional Director</p>
+					<a
+						:href="'mailto:' + selectedDirector?.email"
+						class="text-sm text-primary-600 hover:text-primary-700 mt-2 block"
+						x-text="selectedDirector?.email"
+					></a>
+				</div>
+				<button
+					x-on:click="sendMessage()"
+					class="mt-6 w-full px-4 py-2 bg-primary-600 text-white rounded-md font-medium hover:bg-primary-700 transition-colors"
+				>
+					Send Message
+				</button>
+			</div>
+		</div>
+	</section>
+}
+
+templ USMapSVG() {
+	@USMapWithRegions(USRegions())
+}
+
+templ USMapWithRegions(regions []Region) {
+	<svg
+		viewBox="0 0 700 440"
+		class="w-full h-auto"
+		preserveAspectRatio="xMidYMid meet"
+	>
+		<style>
+			.region-group { cursor: pointer; transition: opacity 0.2s; }
+			.region-group:hover { opacity: 0.75; }
+			.region-group.selected { opacity: 0.6; }
+			.region-group path { stroke: #fff; stroke-width: 1; }
+		</style>
+		for _, region := range regions {
+			<g
+				id={ region.ID }
+				class="region-group"
+				fill={ region.Color }
+				:class={ "selectedRegion === '" + region.ID + "' ? 'selected' : ''" }
+				x-on:click={ "selectRegion('" + region.ID + "')" }
+			>
+				<title>{ region.Name }</title>
+				for _, state := range region.States {
+					<path id={ state.ID } d={ state.Path }></path>
+				}
+			</g>
+		}
+	</svg>
 }
