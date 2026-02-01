@@ -105,6 +105,20 @@ This includes (but is not limited to):
 - Before starting work: review Beads for active issues.
 - After finishing work: update the issue with results and validation evidence.
 
+## Bead phase labels
+Beads use `phase:<value>` labels to track readiness:
+
+- `phase:planning` -- has open questions or unresolved design decisions. NOT ready for implementation.
+- `phase:ready` -- planned, questions resolved, ready to pick up.
+- No phase label -- legacy beads or already completed.
+
+Rules:
+- Do NOT start implementation on a `phase:planning` bead. Resolve questions first.
+- When all questions on a bead are answered and acceptance criteria are clear, swap label: `bd label remove <id> phase:planning && bd label add <id> phase:ready`
+- Use `bd list --label phase:planning` to see what needs planning.
+- Use `bd list --label phase:ready` to see what's ready for work.
+- `bd ready` shows unblocked beads regardless of phase. Check phase labels before starting.
+
 ## Bead structure contract
 Unless explicitly stated otherwise, Beads should follow this structure:
 
@@ -113,7 +127,7 @@ Unless explicitly stated otherwise, Beads should follow this structure:
 - Decisions
 - Risks
 - Acceptance criteria
-- If information is missing or ambigous, ask clarifiying questions before updating the bead.
+- If information is missing or ambiguous, ask clarifying questions before updating the bead.
 - Once updated, the bead should be ready for implementation.
 - Avoid "Open Questions" sections inside beads.
 
