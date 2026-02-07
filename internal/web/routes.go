@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"net/http"
 
+	"github.com/brian-abo/tfo-webapp/internal/auth"
 	"github.com/brian-abo/tfo-webapp/internal/handler/about"
 	contactHandler "github.com/brian-abo/tfo-webapp/internal/handler/contact"
 	"github.com/brian-abo/tfo-webapp/internal/handler/gallery"
@@ -12,7 +13,7 @@ import (
 )
 
 // NewRouter creates and configures the HTTP router.
-func NewRouter(db *sql.DB) *http.ServeMux {
+func NewRouter(db *sql.DB, authMiddleware *auth.Middleware, oauth *auth.OAuthHandler) http.Handler {
 	mux := http.NewServeMux()
 
 	// Repositories
@@ -21,21 +22,51 @@ func NewRouter(db *sql.DB) *http.ServeMux {
 	// Handlers
 	contact := contactHandler.NewHandler(contactRepo)
 
-	// Static assets
+	// Static assets (no auth required)
 	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir("web/static"))))
 
-	// Home
+	// Public pages
 	mux.HandleFunc("GET /", home.Index)
-
-	// About
 	mux.HandleFunc("GET /about", about.Index)
-
-	// Contact
+	mux.HandleFunc("GET /gallery", gallery.Index)
 	mux.HandleFunc("GET /contact", contact.Index)
 	mux.HandleFunc("POST /contact", contact.Submit)
 
-	// Gallery
-	mux.HandleFunc("GET /gallery", gallery.Index)
+	// Auth routes
+	mux.HandleFunc("GET /login", loginPage(oauth != nil))
+	if oauth != nil {
+		mux.HandleFunc("GET /auth/facebook", oauth.HandleLogin)
+		mux.HandleFunc("GET /auth/facebook/callback", oauth.HandleCallback)
+		mux.HandleFunc("POST /auth/logout", oauth.HandleLogout)
+	}
 
-	return mux
+	// Apply session loading middleware to all routes
+	return authMiddleware.LoadSession(mux)
+}
+
+// loginPage renders the login page.
+// TODO: Move to proper handler/template when login UI is implemented.
+func loginPage(oauthEnabled bool) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html")
+		if oauthEnabled {
+			_, _ = w.Write([]byte(`<!DOCTYPE html>
+<html>
+<head><title>Login - The Fallen Outdoors</title></head>
+<body>
+<h1>Login</h1>
+<p><a href="/auth/facebook">Login with Facebook</a></p>
+</body>
+</html>`))
+		} else {
+			_, _ = w.Write([]byte(`<!DOCTYPE html>
+<html>
+<head><title>Login - The Fallen Outdoors</title></head>
+<body>
+<h1>Login</h1>
+<p>Login is not configured. Please set FACEBOOK_CLIENT_ID and FACEBOOK_CLIENT_SECRET.</p>
+</body>
+</html>`))
+		}
+	}
 }
